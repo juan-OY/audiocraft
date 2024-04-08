@@ -21,7 +21,9 @@ from .builders import get_debug_compression_model, get_debug_lm_model
 from .loaders import load_compression_model, load_lm_model
 from ..data.audio_utils import convert_audio
 from ..modules.conditioners import ConditioningAttributes, WavCondition
+import intel_extension_for_pytorch as ipex
 
+IPEX_DEFINED = True
 
 MelodyList = tp.List[tp.Optional[torch.Tensor]]
 MelodyType = tp.Union[torch.Tensor, MelodyList]
@@ -69,7 +71,10 @@ class MusicGen(BaseGenModel):
                 device = 'cuda'
             else:
                 device = 'cpu'
-
+                
+        # use IPEX to run on Intel ARC graphics 
+        if IPEX_DEFINED:
+            device = 'xpu'
         if name == 'debug':
             # used only for unit tests
             compression_model = get_debug_compression_model(device)
