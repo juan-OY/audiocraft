@@ -74,8 +74,9 @@ class BaseGenModel(ABC):
         if self.device.type == 'cpu':
             self.autocast = TorchAutocast(enabled=False)
         else:
-            self.autocast = TorchAutocast(
-                enabled=True, device_type=self.device.type, dtype=torch.float16)
+            self.autocast = TorchAutocast(enabled=False)
+            #self.autocast = TorchAutocast(
+            #    enabled=True, device_type=self.device.type, dtype=torch.float16)
 
     @property
     def frame_rate(self) -> float:
